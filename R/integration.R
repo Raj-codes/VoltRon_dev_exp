@@ -160,7 +160,7 @@ getSpotsFromCells <- function(from_object, from_metadata = NULL, to_object, feat
   # get cell and spot coordinates
   cat("Cell to Spot Distances \n")
   coords_spots <- vrCoordinates(to_object)
-  coords_cells <- vrCoordinates(from_object, reg = TRUE)
+  coords_cells <- vrCoordinates(from_object)
 
   # get distances from cells to spots
   # alldist <- flexclust::dist2(coords_cells, coords_spots)
@@ -205,7 +205,7 @@ getSpotsFromCells <- function(from_object, from_metadata = NULL, to_object, feat
       }
     }
   }
-  raw_counts <- raw_counts[,cell_to_spot_id]
+  raw_counts <- raw_counts[,cell_to_spot_id, drop = FALSE]
 
   # pool cell counts to Spots
   cat("Aggregating cell profiles in spots \n")
@@ -224,6 +224,7 @@ getSpotsFromCells <- function(from_object, from_metadata = NULL, to_object, feat
                          coords = vrCoordinates(to_object)[colnames(aggregate_raw_counts),],
                          image = vrImages(to_object),
                          type = vrAssayTypes(to_object),
+                         name = vrAssayNames(to_object),
                          main_image = to_object@main_image,
                          params = to_object@params)
   new_assay@image <- to_object@image
@@ -238,7 +239,7 @@ getCellsFromTiles <- function(from_object, from_metadata = NULL, to_object, feat
   # get cell and spot coordinates
   cat("Tile to Cell Distances \n")
   coords_cells <- vrCoordinates(to_object)
-  coords_tiles <- vrCoordinates(from_object, reg = TRUE)
+  coords_tiles <- vrCoordinates(from_object)
 
   # get distances from cells to spots
   # tile_to_cell <- FNN::get.knnx(coords_cells, coords_tiles, k = 1)
@@ -265,6 +266,7 @@ getCellsFromTiles <- function(from_object, from_metadata = NULL, to_object, feat
                          coords = vrCoordinates(to_object)[colnames(aggregate_raw_counts),],
                          image = vrImages(to_object),
                          type = vrAssayTypes(to_object),
+                         name = vrAssayNames(to_object),
                          main_image = to_object@main_image,
                          params = to_object@params)
   new_assay@image <- to_object@image

@@ -184,7 +184,6 @@ NULL
 #' @docType methods
 #'
 #' @export
-#'
 setMethod(
   f = '[[',
   signature = c('VoltRon', "character", "missing"),
@@ -201,7 +200,10 @@ setMethod(
       assay_names <- rownames(sample.metadata)
       if(i %in% assay_names){
         cur_assay <- sample.metadata[i,]
-        return(x@samples[[cur_assay$Sample]]@layer[[cur_assay$Layer]]@assay[[cur_assay$Assay]])
+        assay_list <- x@samples[[cur_assay$Sample]]@layer[[cur_assay$Layer]]@assay
+        assay_names <- sapply(assay_list, vrAssayNames)
+        return(assay_list[[which(assay_names == rownames(cur_assay))]])
+        # return(x@samples[[cur_assay$Sample]]@layer[[cur_assay$Layer]]@assay[[cur_assay$Assay]])
       } else {
         stop("There are no samples or assays named ", i, " in this object")
       }
@@ -211,6 +213,10 @@ setMethod(
     }
   }
 )
+
+temp <- function(x, cur_assay){
+  return(x@samples[[cur_assay$Sample]]@layer[[cur_assay$Layer]]@assay[[cur_assay$Assay]])
+}
 
 #' @describeIn VoltRon-methods Overwriting vrAssay or vrSample objects from \code{VoltRon} objects
 #'
@@ -771,7 +777,8 @@ addConnectivity <- function(object, connectivity, sample, layer){
 #' @param image the subseting string passed to \link{image_crop}
 #' @param interactive TRUE if interactive subsetting on the image is demanded
 #' @param use_points if \code{interactive} is \code{TRUE}, use spatial points instead of the reference image
-#'
+#' @param shiny.options a list of shiny options (launch.browser, host, port etc.) passed \code{options} arguement of \link{shinyApp}. For more information, see \link{runApp}
+#' 
 #' @rdname subset
 #' @aliases subset
 #' @method subset VoltRon
@@ -800,9 +807,12 @@ addConnectivity <- function(object, connectivity, sample, layer){
 #' subset(visium_data, features = c("Map3k19", "Rab3gap1"))
 #' 
 #' # interactive subsetting
+#' \dontrun{
 #' visium_subset_data <- subset(visium_data, interactive = TRUE)
 #' visium_subset <- visium_subset_data$subsets[[1]]
-subset.VoltRon <- function(object, subset, samples = NULL, assays = NULL, spatialpoints = NULL, features = NULL, image = NULL, interactive = FALSE, use_points = FALSE) {
+#' }
+subset.VoltRon <- function(object, subset, samples = NULL, assays = NULL, spatialpoints = NULL, features = NULL, image = NULL, interactive = FALSE, use_points = FALSE, 
+                           shiny.options = list(launch.browser = getOption("shiny.launch.browser", interactive()))) {
 
   # subseting based on subset argument
   if (!missing(x = subset)) {
@@ -906,7 +916,7 @@ subset.VoltRon <- function(object, subset, samples = NULL, assays = NULL, spatia
       stop("Please provide a character based subsetting notation, see magick::image_crop documentation")
     }
   } else if(interactive){
-    results <- demuxVoltRon(object, use_points = use_points)
+    results <- demuxVoltRon(object, use_points = use_points, shiny.options = shiny.options)
     return(results)
   }
 
@@ -1228,7 +1238,6 @@ Metadata.VoltRon <- function(object, assay = NULL, type = NULL) {
 #' @method Metadata<- VoltRon
 #'
 #' @export
-#'
 "Metadata<-.VoltRon" <- function(object, assay = NULL, type = NULL, value) {
 
   if(!is.data.frame(value))
@@ -1371,7 +1380,6 @@ vrCoordinates.VoltRon <- function(object, assay = NULL, image_name = NULL, spati
 #' @rdname vrCoordinates
 #' @order 4
 #' @export
-#'
 "vrCoordinates<-.VoltRon" <- function(object, image_name = NULL, spatial_name = NULL, reg = FALSE, value) {
 
   # sample metadata

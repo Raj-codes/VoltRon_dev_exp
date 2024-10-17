@@ -25,11 +25,13 @@ vrSpatialPlot(
   reg = FALSE,
   crop = FALSE,
   legend.pt.size = 2,
+  legend.text.size = 14,
   scale.image = TRUE,
   legend.loc = "right",
   common.legend = TRUE,
-  collapse = TRUE,
-  interactive = FALSE
+  collapse.plots = TRUE,
+  interactive = FALSE,
+  shiny.options = list()
 )
 }
 \arguments{
@@ -76,15 +78,19 @@ and main channel (\link{vrMainChannel}) will be in the background. Otherwise the
 
 \item{legend.pt.size}{the size of points at the legend}
 
+\item{legend.text.size}{the size of the text at the legend}
+
 \item{scale.image}{if TRUE, background image will be scaled down to a low resolution (width: 1000px)}
 
 \item{legend.loc}{the location of the legend, default is "right"}
 
 \item{common.legend}{whether to use a common legend for all plots, see \link{ggarrange}}
 
-\item{collapse}{whether to combine all ggplots}
+\item{collapse.plots}{whether to combine all ggplots}
 
 \item{interactive}{if TRUE, run interactive plot}
+
+\item{shiny.options}{a list of shiny options (browser, host, port etc.) passed \code{options} arguement of \link{shinyApp}. For more information, see \link{runApp}}
 }
 \description{
 Plotting identification of spatially resolved cells, spots, and ROI on associated images from multiple assays in a VoltRon object.

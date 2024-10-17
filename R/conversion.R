@@ -286,8 +286,21 @@ as.AnnData <- function(object, file, assay = NULL, type = c("image", "spatial"),
   
   # Metadata
   metadata <- Metadata(object, assay = assay)
+  
+  # Extract the assay identifier from row names and clean it
   metadata[["library_id"]] <- stringr::str_extract(rownames(metadata), "_Assay[0-9]+$")
   metadata[["library_id"]] <- gsub("^_", "", metadata[["library_id"]])
+  
+  # Get unique library IDs and create new formatted names
+  unique_ids <- unique(metadata[["library_id"]])
+  
+  # Replace assay naming using formatC
+  new_assay_names <- sapply(seq_along(unique_ids), function(i) formatC(i, width = 2, format = "d", flag = "0"))
+  name_mapping <- setNames(paste0("assay", new_assay_names), unique_ids)
+  
+  # Update library_id with new formatted names
+  metadata[["library_id"]] <- name_mapping[metadata[["library_id"]]]
+  
   
   # Embeddings
   obsm <- list()
@@ -332,13 +345,21 @@ as.AnnData <- function(object, file, assay = NULL, type = c("image", "spatial"),
   for (k in 1:2) {
     segmentations_array[,,k] <- t(apply(segmentations_array[,,k], 1, fill_na_with_preceding))
   }
-
+  
   # Images
   images_mgk <- vrImages(object, assay = assay, ...)
+  
+  # Ensure images_mgk is a list
   if(!is.list(images_mgk)){
     images_mgk <- list(images_mgk)
-    names(images_mgk) <- vrAssayNames(object, assay = assay)  
   }
+  
+  # Retrieve and format assay names using formatC
+  assay_names <- vrAssayNames(object, assay = assay)
+  formatted_assay_names <- sapply(seq_along(assay_names), function(i) formatC(i, width = 2, format = "d", flag = "0"))
+  names(images_mgk) <- paste0("assay", formatted_assay_names)
+  
+  # Process images and create the image_data_list
   image_data_list <- lapply(images_mgk, function(img) {
     list(images = list(hires = as.numeric(magick::image_data(img, channels = "rgb"))),
          scalefactors = list(tissue_hires_scalef = 1, spot_diameter_fullres = 0.5))
@@ -381,7 +402,7 @@ as.AnnData <- function(object, file, assay = NULL, type = c("image", "spatial"),
     
     return(success)
     
-  # save as h5ad
+    # save as h5ad
   } else if(grepl(".h5ad$", file)) {
     
     # Check and use a package for saving h5ad
@@ -420,7 +441,8 @@ as.AnnData <- function(object, file, assay = NULL, type = c("image", "spatial"),
   } else {
     stop("the 'file' should have an .h5ad, .zarr or .zarr/ extension")
   }
-}  
+}
+
 
 ####
 # AnnData (Zarr) ####

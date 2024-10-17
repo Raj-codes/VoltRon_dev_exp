@@ -1,0 +1,13 @@
+# Package Information for pkg-config
+
+prefix=/ucrt64
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include/opencv4
+
+Name: OpenCV
+Description: Open Source Computer Vision Library
+Version: 4.8.1
+Libs: -L${exec_prefix}/lib -llibopencv_stitching481.dll -llibopencv_aruco481.dll -llibopencv_bgsegm481.dll -llibopencv_bioinspired481.dll -llibopencv_ccalib481.dll -llibopencv_dnn_objdetect481.dll -llibopencv_dnn_superres481.dll -llibopencv_dpm481.dll -llibopencv_face481.dll -llibopencv_fuzzy481.dll -llibopencv_hfs481.dll -llibopencv_img_hash481.dll -llibopencv_intensity_transform481.dll -llibopencv_line_descriptor481.dll -llibopencv_mcc481.dll -llibopencv_quality481.dll -llibopencv_rapid481.dll -llibopencv_reg481.dll -llibopencv_rgbd481.dll -llibopencv_saliency481.dll -llibopencv_stereo481.dll -llibopencv_structured_light481.dll -llibopencv_phase_unwrapping481.dll -llibopencv_superres481.dll -llibopencv_optflow481.dll -llibopencv_surface_matching481.dll -llibopencv_tracking481.dll -llibopencv_highgui481.dll -llibopencv_datasets481.dll -llibopencv_text481.dll -llibopencv_plot481.dll -llibopencv_videostab481.dll -llibopencv_videoio481.dll -llibopencv_wechat_qrcode481.dll -llibopencv_xfeatures2d481.dll -llibopencv_shape481.dll -llibopencv_ml481.dll -llibopencv_ximgproc481.dll -llibopencv_video481.dll -llibopencv_xobjdetect481.dll -llibopencv_objdetect481.dll -llibopencv_calib3d481.dll -llibopencv_imgcodecs481.dll -llibopencv_features2d481.dll -llibopencv_dnn481.dll -llibopencv_flann481.dll -llibopencv_xphoto481.dll -llibopencv_photo481.dll -llibopencv_imgproc481.dll -llibopencv_core481.dll
+Libs.private: -lpthread
+Cflags: -I${includedir}

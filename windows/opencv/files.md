@@ -1,0 +1,7 @@
+ - mingw-w64-ucrt-x86_64-libjpeg-turbo-3.0.0-1-any.pkg.tar.xz
+ - mingw-w64-ucrt-x86_64-zlib-1.3-9000-any.pkg.tar.xz
+ - mingw-w64-ucrt-x86_64-libpng-1.6.40-1-any.pkg.tar.xz
+ - mingw-w64-ucrt-x86_64-libtiff-4.6.0-1-any.pkg.tar.xz
+ - mingw-w64-ucrt-x86_64-giflib-5.2.1-9000-any.pkg.tar.xz
+ - mingw-w64-ucrt-x86_64-libwebp-1.3.2-1-any.pkg.tar.xz
+ - mingw-w64-ucrt-x86_64-opencv-4.8.1-1-any.pkg.tar.xz

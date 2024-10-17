@@ -19,7 +19,6 @@ LinkingTo: Rcpp, RcppArmadillo (>= 0.4)
 Collate: 
     'RcppExports.R'
     'annotation.R'
-    'zzz.R'
     'assay.R'
     'auxiliary.R'
     'generics.R'
